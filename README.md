@@ -7,9 +7,16 @@ APK is only needed for app-level changes (icon, permissions, native features).
 | App | Opens | Package |
 |---|---|---|
 | 9jaFiber Admin | https://admin.9jafiber.ng | ng.ninejafiber.admin |
-| 9jaFiber Engineer | https://admin.9jafiber.ng/field | ng.ninejafiber.engineer |
+| 9jaFiber Engineer | built in (works offline), talks to the API | ng.ninejafiber.engineer |
 
-Native extras the admin site can use inside the apps: barcode scanning (ONU MAC
+**Engineer** carries its own screens (the admin repo's `src/components/Field`,
+copied by `scripts/sync-field.sh`). Jobs are kept on the phone and open with no
+signal; actions, sign-offs and photos done offline wait on the phone and sync
+when back online. After changing the field screens in the admin repo, run
+`ADMIN_REPO=../9jafiber-admin bash scripts/sync-field.sh`, commit, push. Its
+build needs the repository **variable** `API_URL` (the API base, ending in /api/v1).
+
+Native extras the screens can use inside the apps: barcode scanning (ONU MAC
 labels), camera/photo upload, location. A "No connection" page shows when offline.
 
 ## Getting the APKs

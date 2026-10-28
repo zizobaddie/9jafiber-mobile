@@ -37,9 +37,15 @@ jobs:
       - name: Android SDK
         run: echo "ANDROID_HOME=$ANDROID_HOME" && ls "$ANDROID_HOME/platforms" | tail -3
 
-      - name: Install and sync
+      - name: Install, build the screens (Engineer) and sync
+        env:
+          VITE_API_URL: ${{ vars.API_URL }}
         run: |
           npm ci
+          if [ "${{ matrix.app }}" = "engineer" ]; then
+            if [ -z "$VITE_API_URL" ]; then echo "::error::Set the repository variable API_URL (Settings > Secrets and variables > Actions > Variables), e.g. https://<your-api>/api/v1"; exit 1; fi
+            npm run build
+          fi
           npx cap sync android
 
       - name: Signing key (from the repository secrets)

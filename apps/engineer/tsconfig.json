@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", "lib": ["DOM", "DOM.Iterable", "ES2020"], "module": "ESNext", "moduleResolution": "Bundler",
+    "jsx": "react-jsx", "strict": true, "skipLibCheck": true, "noEmit": true, "esModuleInterop": true, "isolatedModules": true,
+    "types": ["vite/client"],
+    "paths": {
+      "next/navigation": ["./src/shims/navigation.ts"],
+      "@/libs/http/axios.http": ["./src/shims/axios.http.ts"],
+      "@/libs/utils/token.util": ["./src/shims/token.ts"],
+      "@/libs/utils/env.util": ["./src/shims/env.ts"],
+      "@/components/Field/*": ["./src/field/*"]
+    }
+  },
+  "include": ["src"]
+}
