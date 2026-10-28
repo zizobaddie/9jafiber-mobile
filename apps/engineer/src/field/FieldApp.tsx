@@ -7,7 +7,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import SignaturePad from "./SignaturePad";
 import ScanButton from "./ScanButton";
-import { KIND, STATUS, TJob, TJobDetail, api, errMsg, photoUrl, shrink, syncNow, uploadPhoto } from "./fieldApi";
+import JobActionPanel from "./JobActionPanel";
+import { ACTION_LABEL, KIND, STATUS, TJob, TJobDetail, api, errMsg, photoUrl, shrink, syncNow, uploadPhoto } from "./fieldApi";
 import { dismissQueued, useFieldSync } from "./fieldOffline";
 
 const when = (d?: string | null) => (d ? moment(d).format("ddd D MMM, h:mm a") : "—");
@@ -102,6 +103,7 @@ function JobCard({ j, onOpen }: { j: TJob; onOpen: (id: string) => void }) {
           <Badge variant="outline">{STATUS[j.status]}</Badge>
           {j.etaAt && <Badge variant="subtle" colorScheme="blue">ETA {moment(j.etaAt).format("h:mm a")}</Badge>}
           {j.needsEta && <Badge colorScheme="red">Set ETA</Badge>}
+          {j.action && <Badge colorScheme="orange">{ACTION_LABEL[j.action]}</Badge>}
         </Flex>
       </CardBody>
     </Card>
@@ -218,6 +220,8 @@ function JobView({ id, onBack }: { id: string; onBack: () => void }) {
         {j.assignedName && <Text fontSize="xs" color="gray.500" mt={1}>Assigned to {j.assignedName}</Text>}
       </Box>
 
+      {j.jobAction && <JobActionPanel job={j} onChanged={refresh} />}
+
       {j.needsEta && isOpen && (
         <Alert status="error" borderRadius="md" flexDirection="column" alignItems="stretch" gap={2}>
           <Flex align="center"><AlertIcon /><Text fontWeight="semibold">Set an ETA: customers are waiting to hear when service will be back.</Text></Flex>
@@ -318,7 +322,10 @@ function JobView({ id, onBack }: { id: string; onBack: () => void }) {
         j.kind === "fault" ? (
           <Button colorScheme="green" size="lg" onClick={restored.onOpen}>Service restored</Button>
         ) : (
-          <Button colorScheme="green" size="lg" onClick={done.onOpen}>{j.kind === "installation" ? (j.activatedAt ? "Customer sign-off" : "Activate service") : "Finish repair"}</Button>
+          <Stack spacing={1}>
+            <Button colorScheme="green" size="lg" isDisabled={!!j.jobAction && !j.jobAction.done} onClick={done.onOpen}>{j.kind === "installation" ? (j.activatedAt ? "Customer sign-off" : "Activate service") : "Finish repair"}</Button>
+            {j.jobAction && !j.jobAction.done && <Text fontSize="xs" color="orange.500" textAlign="center">Finish &quot;{j.jobAction.label}&quot; above first.</Text>}
+          </Stack>
         )
       )}
       {j.status === "done" && j.signedName && <Text fontSize="sm" color="gray.600">Signed off by {j.signedName}{j.onuMac ? ` · ONU ${j.onuMac}` : ""}</Text>}

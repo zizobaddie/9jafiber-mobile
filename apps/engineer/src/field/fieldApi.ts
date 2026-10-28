@@ -8,7 +8,7 @@ export type TJob = {
   id: string; number: string; kind: "installation" | "fault" | "repair"; status: "open" | "assigned" | "en_route" | "on_site" | "done" | "cancelled";
   title: string; details: string | null; address: string | null; latitude: number | null; longitude: number | null; contactPhone: string | null;
   assignedTo: string | null; assignedName: string | null; etaAt: string | null; startedAt: string | null; arrivedAt: string | null;
-  completedAt: string | null; createdAt: string; outageId: string | null; needsEta: boolean; activatedAt?: string | null;
+  completedAt: string | null; createdAt: string; outageId: string | null; needsEta: boolean; activatedAt?: string | null; action?: TActionKey | null;
 };
 export type TJobDetail = TJob & {
   onuMac: string | null; onuSerial: string | null; completionNotes: string | null; signedName: string | null; hasSignature: boolean;
@@ -19,7 +19,16 @@ export type TJobDetail = TJob & {
   events: { type: string; text: string; by: string | null; at: string }[];
   photos: { id: string; caption: string | null; by: string | null; at: string }[];
   photosEnabled: boolean;
+  jobAction?: TJobAction | null;
 };
+export type TActionKey = "change_device" | "repush" | "relocate";
+type TPart = { ok: boolean; skipped?: boolean; note?: string | null };
+export type TJobAction = {
+  key: TActionKey; label: string; help: string; steps: string[]; oldMac: string | null; newMac: string | null; macAt: string | null;
+  push: { wifi: TPart; wan: TPart; at: string } | null;
+  relocated: { from: string | null; to: string; latitude: number | null; longitude: number | null; at: string } | null; done: boolean;
+};
+export const ACTION_LABEL: Record<TActionKey, string> = { change_device: "Change device", repush: "Re-push settings", relocate: "Relocate" };
 export type TEnvelope<T> = { status: boolean; message: string; data: T };
 
 /** Reads are kept on the phone for no-signal moments; job actions wait on the phone until the signal is back. */
