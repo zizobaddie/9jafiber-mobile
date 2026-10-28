@@ -39,7 +39,7 @@ jobs:
 
       - name: Install, build the screens (Engineer) and sync
         env:
-          VITE_API_URL: ${{ vars.API_URL }}
+          VITE_API_URL: ${{ vars.API_URL || secrets.API_URL }}
         run: |
           npm ci
           if [ "${{ matrix.app }}" = "engineer" ]; then
