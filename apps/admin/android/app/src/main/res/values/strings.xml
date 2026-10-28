@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">9jaFiber Admin</string>
+    <string name="title_activity_main">9jaFiber Admin</string>
+    <string name="package_name">ng.ninejafiber.admin</string>
+    <string name="custom_url_scheme">ng.ninejafiber.admin</string>
+</resources>

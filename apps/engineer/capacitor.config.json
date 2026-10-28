@@ -1,0 +1,15 @@
+{
+  "appId": "ng.ninejafiber.engineer",
+  "appName": "9jaFiber Engineer",
+  "webDir": "www",
+  "server": {
+    "url": "https://admin.9jafiber.ng/field",
+    "errorPath": "offline.html",
+    "allowNavigation": ["admin.9jafiber.ng", "*.9jafiber.ng"]
+  },
+  "android": { "allowMixedContent": false, "captureInput": true },
+  "plugins": {
+    "SplashScreen": { "launchShowDuration": 1200, "backgroundColor": "#111315", "showSpinner": false },
+    "StatusBar": { "backgroundColor": "#111315", "style": "DARK", "overlaysWebView": false }
+  }
+}
